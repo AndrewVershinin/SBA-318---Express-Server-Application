@@ -38,7 +38,7 @@ router
         }
     });
     
-// Chain routes with .route() for PATCH and DELETE
+// Chain routes with .route() for GET, PATCH and DELETE
 router
     .route('/:id')
     .get((req, res) => {
@@ -53,8 +53,21 @@ router
         const user = users.find(u => u.id === parseInt(req.params.id));
         if (user) {
             user.username = req.body.username || user.username;
-            user
+            user.email = req.body.email || user.email;
+            user.name = req.body.name || user.name;
+            res.json(user);  // Respond with the updated user
+        } else {
+            res.status(404).send('User not found');
         }
     })
+    .delete((req, res) => {
+        const index = users.findIndex(u => u.id === parseInt(req.params.id));
+        if (index !== -1) {
+          users.splice(index, 1);  // Remove the user from the array
+          res.status(204).send();  // Respond with no content status
+        } else {
+          res.status(404).send('User not found');
+        }
+    });
 
 module.exports = router;

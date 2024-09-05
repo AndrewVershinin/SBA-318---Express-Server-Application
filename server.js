@@ -5,11 +5,10 @@ const PORT = 3000;
 
 // Import data
 const usersRouter = require("./routes/users");
-const posts = require('./data/posts');
-const comments = require('./data/comments');
+const postsRouter = require('./routes/posts');
+const commentsRouter = require('./routes/comments');
 
 // Middleware to parse JSON and URL-encoded data
-app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -24,6 +23,8 @@ app.use((req, res, next) => {
 
 // Use Routes
 app.use('/users', usersRouter)
+app.use('/posts', postsRouter)
+app.use('/comments', commentsRouter)
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
