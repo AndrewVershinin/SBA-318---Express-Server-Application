@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const posts = require('../data/posts');
+const users = require('../data/users');
 
 // Helper function for error creation
 const createError = (status, message) => {
@@ -15,18 +16,26 @@ router
     .get((req, res) => {
         res.json(posts); // Get all posts
     })
-    .post((req, res) => {
-        if (req.body.title && req.body.content && req.body.authorId) {
+    .post((req, res, next) => {
+
+        const { title, content, username } = req.body;
+    
+        // Find the user by username
+        const user = users.find(u => u.username === username);
+        if (!user) {
+            return next(new Error('User not found'));
+        }
+        if (title && content && user.username) {
             const newPost = {
                 id: posts.length ? posts[posts.length - 1].id + 1 : 1,
-                title: req.body.title,
-                content: req.body.content,
-                authorId: req.body.authorId
+                title,
+                content,
+                authorId: user.id  // Set authorId based on the found user's ID
             };
             posts.push(newPost);
             res.status(201).json(newPost);
         } else {
-            return next(createError(400, 'Insufficient Data'));
+            next(new Error('Insufficient Data'));
         }
     });
 

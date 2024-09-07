@@ -1,6 +1,8 @@
 const express = require('express');
 const comments = require('../data/comments');
-const router = express.Router()
+const router = express.Router();
+const posts = require('../data/posts');
+const users = require('../data/users');  // Assuming you have a list of users
 
 // Helper function for error creation
 const createError = (status, message) => {
@@ -13,15 +15,28 @@ const createError = (status, message) => {
 router
     .route('/')
     .get((req, res) => {
-        res.json(comments); // Ger all comments
+        res.json(comments); // Get all comments
     })
     .post((req, res, next) => {
-        if (req.body.postId && req.body.content && req.body.authorId) {
+        const { content, authorId, postId } = req.body;
+
+        // Check if the author and post exist
+        const author = users.find(u => u.id === parseInt(authorId));
+        const post = posts.find(p => p.id === parseInt(postId));
+
+        if (!author) {
+            return next(createError(404, 'Author not found'));
+          }
+        if (!post) {
+        return next(createError(404, 'Post not found'));
+        }
+
+        if (content && authorId && postId) {
             const newComment = {
                     id: comments.length ? comments[comments.length - 1].id + 1 : 1,
-                    postId: req.body.postId,
-                    content: req.body.content,
-                    authorId: req.body.authorId
+                    postId: parseInt(postId),
+                    content,
+                    authorId: parseInt(authorId)
                 };
                 comments.push(newComment); // Add new comment to the comments Array
                 res.status(201).json(newComment);
