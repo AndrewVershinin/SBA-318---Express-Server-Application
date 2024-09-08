@@ -8,74 +8,90 @@
 </head>
 <body>
     <h1>Hello there! Welcome to my App</h1>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/users" target="_blank">Users</a></li>
+                <li><a href="/posts" target="_blank">Posts</a></li>
+                <li><a href="/comments" target="_blank">Comments</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="users-section">
+            <h2>Users</h2>
+            <ul>
+                <% users.forEach(user => { %>
+                    <li><%= user.name %> (Username: <%= user.username %>, Email: <%= user.email %>, Age: <%= user.age %>)</li>
+                <% }) %>
+            </ul>
 
-    <section id="users-section">
-        <h2>Users</h2>
-        <ul>
-            <% users.forEach(user => { %>
-                <li><%= user.name %> (Username: <%= user.username %>, Email: <%= user.email %>)</li>
-            <% }) %>
-        </ul>
+            <h3>Add New User</h3>
+            <form action="/users" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" required>
 
-        <h3>Add New User</h3>
-        <form action="/users" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" name="name" id="name" required>
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" required>
 
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username" required>
+                <label for="age">Age:</label>
+                <input type="number" name="age" id="age" required>
 
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required>
 
-            <button type="submit">Add User</button>
-        </form>
-    </section>
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
 
-    <section id="posts-section">
-        <h2>Posts</h2>
-        <ul>
-            <% posts.forEach(post => { %>
-                <li><%= post.title %> by User <%= post.authorId %>: <%= post.content %></li>
-            <% }) %>
-        </ul>
+                <button type="submit">Add User</button>
+            </form>
+            <hr>
+        </section>
 
-        <h3>Add New Post</h3>
-        <form action="/posts" method="POST">
-            <label for="title">Title:</label>
-            <input type="text" name="title" id="title" required>
+        <section id="posts-section">
+            <h2>Posts</h2>
+            <ul>
+                <% posts.forEach(post => { %>
+                    <li><%= post.title %> by User <%= post.authorId %>: <%= post.content %></li>
+                <% }) %>
+            </ul>
 
-            <label for="content">Content:</label>
-            <textarea name="content" id="content" required></textarea>
+            <h3>Add New Post</h3>
+            <form action="/posts" method="POST">
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title" required>
 
-            <label for="authorId">Username:</label>
-            <input type="text" name="username" id="username" required>
+                <label for="content">Content:</label>
+                <textarea name="content" id="content" required></textarea>
 
-            <button type="submit">Add Post</button>
-        </form>
-    </section>
+                <label for="authorId">Author ID:</label>
+                <input type="number" name="authorId" id="authorId" required>
 
-    <section id="comments-section">
-        <h2>Comments</h2>
-        <ul>
-            <% comments.forEach(comment => { %>
-                <li><%= comment.content %> by User <%= comment.authorId %> on Post <%= comment.postId %></li>
-            <% }) %>
-        </ul>
+                <button type="submit">Add Post</button>
+            </form>
+            <hr>
+        </section>
 
-        <h3>Add New Comment</h3>
-        <form action="/comments" _b method="POST">
-            <label for="content">Comment:</label>
-            <textarea name="content" id="content" required></textarea>
+        <section id="comments-section">
+            <h2>Comments</h2>
+            <ul>
+                <% comments.forEach(comment => { %>
+                    <li><%= comment.content %> by User <%= comment.authorId %> on Post <%= comment.postId %></li>
+                <% }) %>
+            </ul>
 
-            <label for="authorId">Author ID:</label>
-            <input type="number" name="authorId" id="authorId" required>
+            <h3>Add New Comment</h3>
+            <form action="/comments" _b method="POST">
+                <label for="content">Comment:</label>
+                <textarea name="content" id="content" required></textarea>
 
-            <label for="postId">Post ID:</label>
-            <input type="number" name="postId" id="postId" required>
+                <label for="authorId">Author ID:</label>
+                <input type="number" name="authorId" id="authorId" required>
 
-            <button type="submit">Add Comment</button>
-        </form>
-    </section>
+                <label for="postId">Post ID:</label>
+                <input type="number" name="postId" id="postId" required>
+
+                <button type="submit">Add Comment</button>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

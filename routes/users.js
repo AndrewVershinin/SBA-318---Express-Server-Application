@@ -13,7 +13,17 @@ const createError = (status, message) => {
 router
     .route('/')
     .get((req, res) => {
-        res.json(users) // Get all users
+        let userAge = users;
+
+        // Check for the 'age' query parameter
+        if(req.query.age) {
+            const ageFilter = parseInt(req.query.age);
+
+            // Filter users by age if the query parameter exists
+            userAge = users.filter(user => user.age === ageFilter);
+        }
+
+        res.json(userAge); // Return filtered users or all users if no age filter
     })
     .post((req, res, next) => {
         // Check if the required fields are present in the request body
@@ -28,7 +38,8 @@ router
                 id: users.length ? users[users.length - 1].id + 1 : 1,
                 name: req.body.name,
                 username: req.body.username,
-                email: req.body.email
+                email: req.body.email,
+                age: req.body.age
             };
             users.push(newUser); // Add new user to the users array
             res.status(201).json(users[users.length - 1]);
@@ -55,6 +66,7 @@ router
             user.username = req.body.username || user.username;
             user.email = req.body.email || user.email;
             user.name = req.body.name || user.name;
+            user.age = req.body.age || user.age;
             res.json(user);  // Respond with the updated user
         } else {
             res.status(404).send('User not found');

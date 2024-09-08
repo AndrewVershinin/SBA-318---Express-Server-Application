@@ -21,11 +21,11 @@ router
         const { title, content, username } = req.body;
     
         // Find the user by username
-        const user = users.find(u => u.username === username);
+        const user = users.find(u => u.id === parseInt(username));
         if (!user) {
             return next(new Error('User not found'));
         }
-        if (title && content && user.username) {
+        if (title && content && username) {
             const newPost = {
                 id: posts.length ? posts[posts.length - 1].id + 1 : 1,
                 title,
